@@ -14,5 +14,6 @@ namespace SkyBooker.AuthService.Services
         Task<bool> DeleteUserAsync(Guid userId);
         Task<bool> UpdateUserAsync(Guid userId, UpdateUserRequest request);
         Task<bool> UpdatePasswordAsync(Guid userId, UpdatePasswordRequest request);
+        Task<bool> UpdateUserRoleAsync(Guid userId, string role);
     }
 }

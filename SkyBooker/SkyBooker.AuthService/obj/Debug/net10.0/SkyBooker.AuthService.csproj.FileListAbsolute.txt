@@ -8,7 +8,6 @@ D:\SkyBooker_Backend\SkyBooker\SkyBooker.AuthService\bin\Debug\net10.0\SkyBooker
 D:\SkyBooker_Backend\SkyBooker\SkyBooker.AuthService\bin\Debug\net10.0\SkyBooker.AuthService.pdb
 D:\SkyBooker_Backend\SkyBooker\SkyBooker.AuthService\bin\Debug\net10.0\Humanizer.dll
 D:\SkyBooker_Backend\SkyBooker\SkyBooker.AuthService\bin\Debug\net10.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
-D:\SkyBooker_Backend\SkyBooker\SkyBooker.AuthService\bin\Debug\net10.0\Microsoft.AspNetCore.OpenApi.dll
 D:\SkyBooker_Backend\SkyBooker\SkyBooker.AuthService\bin\Debug\net10.0\Microsoft.Bcl.AsyncInterfaces.dll
 D:\SkyBooker_Backend\SkyBooker\SkyBooker.AuthService\bin\Debug\net10.0\Microsoft.CodeAnalysis.dll
 D:\SkyBooker_Backend\SkyBooker\SkyBooker.AuthService\bin\Debug\net10.0\Microsoft.CodeAnalysis.CSharp.dll

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SkyBooker.AuthService.DTOs;
 using SkyBooker.AuthService.Services;
@@ -16,6 +17,7 @@ namespace SkyBooker.AuthService.Controllers
         }
 
         [HttpPost("register")]
+        [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
             var response = await _authService.RegisterAsync(request);
@@ -23,6 +25,7 @@ namespace SkyBooker.AuthService.Controllers
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
             var response = await _authService.LoginAsync(request);
@@ -30,6 +33,7 @@ namespace SkyBooker.AuthService.Controllers
         }
 
         [HttpGet("user/{userId}")]
+        [Authorize]
         public async Task<IActionResult> GetUserById(Guid userId)
         {
             var user = await _authService.GetUserByIdAsync(userId);
@@ -39,6 +43,7 @@ namespace SkyBooker.AuthService.Controllers
         }
 
         [HttpGet("user/email/{email}")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> GetUserByEmail(string email)
         {
             var user = await _authService.GetUserByEmailAsync(email);
@@ -48,6 +53,7 @@ namespace SkyBooker.AuthService.Controllers
         }
 
         [HttpGet("search")]
+        [Authorize(Policy = "AdminOrAirlineStaff")]
         public async Task<IActionResult> SearchUsers([FromQuery] string term)
         {
             if (string.IsNullOrEmpty(term))
@@ -58,6 +64,7 @@ namespace SkyBooker.AuthService.Controllers
         }
 
         [HttpDelete("user/{userId}")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> DeleteUser(Guid userId)
         {
             var result = await _authService.DeleteUserAsync(userId);
@@ -67,6 +74,7 @@ namespace SkyBooker.AuthService.Controllers
         }
 
         [HttpPut("user/{userId}")]
+        [Authorize]
         public async Task<IActionResult> UpdateUser(Guid userId, [FromBody] UpdateUserRequest request)
         {
             var result = await _authService.UpdateUserAsync(userId, request);
@@ -76,12 +84,23 @@ namespace SkyBooker.AuthService.Controllers
         }
 
         [HttpPut("user/{userId}/password")]
+        [Authorize]
         public async Task<IActionResult> UpdatePassword(Guid userId, [FromBody] UpdatePasswordRequest request)
         {
             var result = await _authService.UpdatePasswordAsync(userId, request);
             if (!result)
                 return BadRequest(new { message = "Invalid user or old password" });
             return Ok(new { message = "Password updated successfully" });
+        }
+
+        [HttpPut("user/{userId}/role")]
+        [Authorize(Policy = "AdminOnly")]
+        public async Task<IActionResult> UpdateUserRole(Guid userId, [FromBody] string role)
+        {
+            var result = await _authService.UpdateUserRoleAsync(userId, role);
+            if (!result)
+                return NotFound(new { message = "User not found" });
+            return Ok(new { message = "User role updated successfully" });
         }
     }
 }
