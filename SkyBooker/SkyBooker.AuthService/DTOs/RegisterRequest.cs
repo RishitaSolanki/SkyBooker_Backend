@@ -15,5 +15,8 @@ namespace SkyBooker.AuthService.DTOs
         [Required]
         [MinLength(6)]
         public string Password { get; set; } = string.Empty;
+
+        [MaxLength(20)]
+        public string Role { get; set; } = "PASSENGER"; // PASSENGER, AIRLINE_STAFF, ADMIN
     }
 }

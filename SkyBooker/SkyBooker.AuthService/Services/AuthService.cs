@@ -34,7 +34,7 @@ namespace SkyBooker.AuthService.Services
                 UserId = Guid.NewGuid(),
                 FullName = request.FullName,
                 Email = request.Email,
-                Role = "PASSENGER"
+                Role = request.Role ?? "PASSENGER"
             };
 
             user.PasswordHash = _passwordHasher.HashPassword(user, request.Password);
@@ -145,6 +145,19 @@ namespace SkyBooker.AuthService.Services
             return true;
         }
 
+        public async Task<bool> UpdateUserRoleAsync(Guid userId, string role)
+        {
+            var user = await _userRepository.FindByUserIdAsync(userId);
+            if (user == null)
+                return false;
+
+            user.Role = role;
+
+            await _userRepository.UpdateAsync(user);
+            await _userRepository.SaveChangesAsync();
+            return true;
+        }
+
         private UserProfileResponse MapToProfileResponse(User user)
         {
             return new UserProfileResponse
@@ -163,7 +176,8 @@ namespace SkyBooker.AuthService.Services
         private string GenerateJwtToken(User user)
         {
             var key = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
+                Encoding.UTF8.GetBytes(_configuration["Jwt:SecretKey"] ?? 
+                    throw new InvalidOperationException("JWT SecretKey not configured")));
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
@@ -171,7 +185,7 @@ namespace SkyBooker.AuthService.Services
             {
                 new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, user.Role)
+                new Claim(ClaimTypes.Role, user.Role.ToUpper())
             };
 
             var token = new JwtSecurityToken(
