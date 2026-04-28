@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SkyBooker.AuthService")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d3d28ee8f4311862c4e733d0541d87765896cad6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6296e5d83e5fbe9e52888ee9e1fd869c616ddb39")]
 [assembly: System.Reflection.AssemblyProductAttribute("SkyBooker.AuthService")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SkyBooker.AuthService")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
