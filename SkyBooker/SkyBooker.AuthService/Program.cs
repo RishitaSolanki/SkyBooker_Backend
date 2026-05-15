@@ -14,7 +14,7 @@ builder.Services.AddControllers();
 
 // Database - SQLite
 builder.Services.AddDbContext<UsersDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"), x => x.MigrationsHistoryTable("__EFMigrationsHistory_AuthService")));
+    options.UseNpgsql(ConvertPostgresUri(builder.Configuration.GetConnectionString("DefaultConnection")), x => x.MigrationsHistoryTable("__EFMigrationsHistory_AuthService")));
 
 // Services
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -125,3 +125,11 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+static string ConvertPostgresUri(string uri)
+{
+    if (string.IsNullOrEmpty(uri) || !uri.StartsWith("postgres://")) return uri;
+    var databaseUri = new Uri(uri);
+    var userInfo = databaseUri.UserInfo.Split(':');
+    return $"Host={databaseUri.Host};Port={databaseUri.Port};Database={databaseUri.AbsolutePath.TrimStart('/')};Username={userInfo[0]};Password={userInfo[1]};SSL Mode=Require;Trust Server Certificate=true;";
+}

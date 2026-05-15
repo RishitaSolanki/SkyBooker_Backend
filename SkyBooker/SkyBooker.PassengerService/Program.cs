@@ -16,7 +16,7 @@ builder.Services.AddControllers();
 
 // Configure DbContext
 builder.Services.AddDbContext<PassengerDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"), x => x.MigrationsHistoryTable("__EFMigrationsHistory_PassengerService")));
+    options.UseNpgsql(ConvertPostgresUri(builder.Configuration.GetConnectionString("DefaultConnection")), x => x.MigrationsHistoryTable("__EFMigrationsHistory_PassengerService")));
 
 // Register Repositories
 builder.Services.AddScoped<IPassengerRepository, PassengerRepository>();
@@ -142,3 +142,11 @@ using (var scope = app.Services.CreateScope())
 
 app.Run();
 
+
+static string ConvertPostgresUri(string uri)
+{
+    if (string.IsNullOrEmpty(uri) || !uri.StartsWith("postgres://")) return uri;
+    var databaseUri = new Uri(uri);
+    var userInfo = databaseUri.UserInfo.Split(':');
+    return $"Host={databaseUri.Host};Port={databaseUri.Port};Database={databaseUri.AbsolutePath.TrimStart('/')};Username={userInfo[0]};Password={userInfo[1]};SSL Mode=Require;Trust Server Certificate=true;";
+}
