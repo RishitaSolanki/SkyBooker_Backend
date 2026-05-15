@@ -16,9 +16,7 @@ services:
     dockerfilePath: SkyBooker/SkyBooker.AuthService/Dockerfile
     envVars:
       - key: ConnectionStrings__DefaultConnection
-        fromDatabase:
-          name: skybooker-db
-          property: connectionString
+        value: Host=${skybooker-db.host};Port=${skybooker-db.port};Database=${skybooker-db.databaseName};Username=${skybooker-db.user};Password=${skybooker-db.password};SSL Mode=Require;Trust Server Certificate=true;
 
   # 2. FlightService
   - type: web
@@ -29,9 +27,7 @@ services:
     dockerfilePath: SkyBooker/SkyBooker.FlightService/Dockerfile
     envVars:
       - key: ConnectionStrings__DefaultConnection
-        fromDatabase:
-          name: skybooker-db
-          property: connectionString
+        value: Host=${skybooker-db.host};Port=${skybooker-db.port};Database=${skybooker-db.databaseName};Username=${skybooker-db.user};Password=${skybooker-db.password};SSL Mode=Require;Trust Server Certificate=true;
 
   # 3. BookingService
   - type: web
@@ -42,9 +38,7 @@ services:
     dockerfilePath: SkyBooker/SkyBooker.BookingService/Dockerfile
     envVars:
       - key: ConnectionStrings__DefaultConnection
-        fromDatabase:
-          name: skybooker-db
-          property: connectionString
+        value: Host=${skybooker-db.host};Port=${skybooker-db.port};Database=${skybooker-db.databaseName};Username=${skybooker-db.user};Password=${skybooker-db.password};SSL Mode=Require;Trust Server Certificate=true;
 
   # 4. SeatService
   - type: web
@@ -55,9 +49,7 @@ services:
     dockerfilePath: SkyBooker/SkyBooker.SeatService/Dockerfile
     envVars:
       - key: ConnectionStrings__DefaultConnection
-        fromDatabase:
-          name: skybooker-db
-          property: connectionString
+        value: Host=${skybooker-db.host};Port=${skybooker-db.port};Database=${skybooker-db.databaseName};Username=${skybooker-db.user};Password=${skybooker-db.password};SSL Mode=Require;Trust Server Certificate=true;
 
   # 5. PassengerService
   - type: web
@@ -68,9 +60,7 @@ services:
     dockerfilePath: SkyBooker/SkyBooker.PassengerService/Dockerfile
     envVars:
       - key: ConnectionStrings__DefaultConnection
-        fromDatabase:
-          name: skybooker-db
-          property: connectionString
+        value: Host=${skybooker-db.host};Port=${skybooker-db.port};Database=${skybooker-db.databaseName};Username=${skybooker-db.user};Password=${skybooker-db.password};SSL Mode=Require;Trust Server Certificate=true;
 
   # 6. PaymentService
   - type: web
@@ -81,9 +71,7 @@ services:
     dockerfilePath: SkyBooker/SkyBooker.PaymentService/Dockerfile
     envVars:
       - key: ConnectionStrings__DefaultConnection
-        fromDatabase:
-          name: skybooker-db
-          property: connectionString
+        value: Host=${skybooker-db.host};Port=${skybooker-db.port};Database=${skybooker-db.databaseName};Username=${skybooker-db.user};Password=${skybooker-db.password};SSL Mode=Require;Trust Server Certificate=true;
 
   # 7. AirlineService
   - type: web
@@ -94,9 +82,7 @@ services:
     dockerfilePath: SkyBooker/SkyBooker.AirlineService/Dockerfile
     envVars:
       - key: ConnectionStrings__DefaultConnection
-        fromDatabase:
-          name: skybooker-db
-          property: connectionString
+        value: Host=${skybooker-db.host};Port=${skybooker-db.port};Database=${skybooker-db.databaseName};Username=${skybooker-db.user};Password=${skybooker-db.password};SSL Mode=Require;Trust Server Certificate=true;
 
   # 8. NotificationService
   - type: web
@@ -107,6 +93,4 @@ services:
     dockerfilePath: SkyBooker/SkyBooker.NotificationService/Dockerfile
     envVars:
       - key: ConnectionStrings__DefaultConnection
-        fromDatabase:
-          name: skybooker-db
-          property: connectionString
+        value: Host=${skybooker-db.host};Port=${skybooker-db.port};Database=${skybooker-db.databaseName};Username=${skybooker-db.user};Password=${skybooker-db.password};SSL Mode=Require;Trust Server Certificate=true;
