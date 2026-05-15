@@ -2,95 +2,67 @@ version: "1"
 
 databases:
   - name: skybooker-db
-    databaseName: skybooker
-    user: skybooker
-    plan: free
+      databaseName: skybooker
+          user: skybooker
+              plan: free
 
-services:
-  # 1. AuthService
-  - type: web
-    name: skybooker-auth
-    env: docker
-    plan: free
-    dockerContext: .
-    dockerfilePath: SkyBooker/SkyBooker.AuthService/Dockerfile
-    envVars:
-      - key: ConnectionStrings__DefaultConnection
-        value: "Host=${{skybooker-db.host}};Port=${{skybooker-db.port}};Database=${{skybooker-db.databaseName}};Username=${{skybooker-db.user}};Password=${{skybooker-db.password}};SSL Mode=Require;Trust Server Certificate=true;"
+              services:
+                # 1. AuthService
+                  - type: web
+                      name: skybooker-auth
+                          env: docker
+                              plan: free
+                                  dockerContext: .
+                                      dockerfilePath: SkyBooker/SkyBooker.AuthService/Dockerfile
+                                          envVars:
+                                                - key: ConnectionStrings__DefaultConnection
+                                                        fromDatabase:
+                                                                  name: skybooker-db
+                                                                            property: connectionString
 
-  # 2. FlightService
-  - type: web
-    name: skybooker-flight
-    env: docker
-    plan: free
-    dockerContext: .
-    dockerfilePath: SkyBooker/SkyBooker.FlightService/Dockerfile
-    envVars:
-      - key: ConnectionStrings__DefaultConnection
-        value: "Host=${{skybooker-db.host}};Port=${{skybooker-db.port}};Database=${{skybooker-db.databaseName}};Username=${{skybooker-db.user}};Password=${{skybooker-db.password}};SSL Mode=Require;Trust Server Certificate=true;"
-
-  # 3. BookingService
-  - type: web
-    name: skybooker-booking
-    env: docker
-    plan: free
-    dockerContext: .
-    dockerfilePath: SkyBooker/SkyBooker.BookingService/Dockerfile
-    envVars:
-      - key: ConnectionStrings__DefaultConnection
-        value: "Host=${{skybooker-db.host}};Port=${{skybooker-db.port}};Database=${{skybooker-db.databaseName}};Username=${{skybooker-db.user}};Password=${{skybooker-db.password}};SSL Mode=Require;Trust Server Certificate=true;"
-
-  # 4. SeatService
-  - type: web
-    name: skybooker-seat
-    env: docker
-    plan: free
-    dockerContext: .
-    dockerfilePath: SkyBooker/SkyBooker.SeatService/Dockerfile
-    envVars:
-      - key: ConnectionStrings__DefaultConnection
-        value: "Host=${{skybooker-db.host}};Port=${{skybooker-db.port}};Database=${{skybooker-db.databaseName}};Username=${{skybooker-db.user}};Password=${{skybooker-db.password}};SSL Mode=Require;Trust Server Certificate=true;"
-
-  # 5. PassengerService
-  - type: web
-    name: skybooker-passenger
-    env: docker
-    plan: free
-    dockerContext: .
-    dockerfilePath: SkyBooker/SkyBooker.PassengerService/Dockerfile
-    envVars:
-      - key: ConnectionStrings__DefaultConnection
-        value: "Host=${{skybooker-db.host}};Port=${{skybooker-db.port}};Database=${{skybooker-db.databaseName}};Username=${{skybooker-db.user}};Password=${{skybooker-db.password}};SSL Mode=Require;Trust Server Certificate=true;"
-
-  # 6. PaymentService
-  - type: web
-    name: skybooker-payment
-    env: docker
-    plan: free
-    dockerContext: .
-    dockerfilePath: SkyBooker/SkyBooker.PaymentService/Dockerfile
-    envVars:
-      - key: ConnectionStrings__DefaultConnection
-        value: "Host=${{skybooker-db.host}};Port=${{skybooker-db.port}};Database=${{skybooker-db.databaseName}};Username=${{skybooker-db.user}};Password=${{skybooker-db.password}};SSL Mode=Require;Trust Server Certificate=true;"
-
-  # 7. AirlineService
-  - type: web
-    name: skybooker-airline
-    env: docker
-    plan: free
-    dockerContext: .
-    dockerfilePath: SkyBooker/SkyBooker.AirlineService/Dockerfile
-    envVars:
-      - key: ConnectionStrings__DefaultConnection
-        value: "Host=${{skybooker-db.host}};Port=${{skybooker-db.port}};Database=${{skybooker-db.databaseName}};Username=${{skybooker-db.user}};Password=${{skybooker-db.password}};SSL Mode=Require;Trust Server Certificate=true;"
-
-  # 8. NotificationService
-  - type: web
-    name: skybooker-notification
-    env: docker
-    plan: free
-    dockerContext: .
-    dockerfilePath: SkyBooker/SkyBooker.NotificationService/Dockerfile
-    envVars:
-      - key: ConnectionStrings__DefaultConnection
-        value: "Host=${{skybooker-db.host}};Port=${{skybooker-db.port}};Database=${{skybooker-db.databaseName}};Username=${{skybooker-db.user}};Password=${{skybooker-db.password}};SSL Mode=Require;Trust Server Certificate=true;"
+                                                                              # 2. FlightService
+                                                                                - type: web
+                                                                                    name: skybooker-flight
+                                                                                        env: docker
+                                                                                            plan: free
+                                                                                                dockerContext: .
+                                                                                                    dockerfilePath: SkyBooker/SkyBooker.FlightService/Dockerfile
+                                                                                                        envVars:
+                                                                                                              - key: ConnectionStrings__DefaultConnection
+                                                                                                                      fromDatabase:
+                                                                                                                                name: skybooker-db
+                                                                                                                                          property: connectionString
+                                                                                                                                          
+                                                                                                                                            # 3. BookingService
+                                                                                                                                              - type: web
+                                                                                                                                                  name: skybooker-booking
+                                                                                                                                                      env: docker
+                                                                                                                                                          plan: free
+                                                                                                                                                              dockerContext: .
+                                                                                                                                                                  dockerfilePath: SkyBooker/SkyBooker.BookingService/Dockerfile
+                                                                                                                                                                      envVars:
+                                                                                                                                                                            - key: ConnectionStrings__DefaultConnection
+                                                                                                                                                                                    fromDatabase:
+                                                                                                                                                                                              name: skybooker-db
+                                                                                                                                                                                                        property: connectionString
+                                                                                                                                                                                                        
+                                                                                                                                                                                                          # 4. SeatService
+                                                                                                                                                                                                            - type: web
+                                                                                                                                                                                                                name: skybooker-seat
+                                                                                                                                                                                                                    env: docker
+                                                                                                                                                                                                                        plan: free
+                                                                                                                                                                                                                            dockerContext: .
+                                                                                                                                                                                                                                dockerfilePath: SkyBooker/SkyBooker.SeatService/Dockerfile
+                                                                                                                                                                                                                                    envVars:
+                                                                                                                                                                                                                                          - key: ConnectionStrings__DefaultConnection
+                                                                                                                                                                                                                                                  fromDatabase:
+                                                                                                                                                                                                                                                            name: skybooker-db
+                                                                                                                                                                                                                                                                      property: connectionString
+                                                                                                                                                                                                                                                                      
+                                                                                                                                                                                                                                                                        # 5. PassengerService
+                                                                                                                                                                                                                                                                          - type: web
+                                                                                                                                                                                                                                                                              name: skybooker-passenger
+                                                                                                                                                                                                                                                                                  env: docker
+                                                                                                                                                                                                                                                                                      plan: free
+                                                                                                                                                                                                                                                                                          dockerContext: .
+                                                                                                                                                                                                                                                                                              dockerfilePath: SkyBo
