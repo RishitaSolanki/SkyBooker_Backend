@@ -17,7 +17,7 @@ public class BookingController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize]
+    [AllowAnonymous]
     public async Task<IActionResult> CreateBooking([FromBody] CreateBookingDto request)
     {
         var result = await _bookingService.CreateBooking(request);
@@ -47,7 +47,7 @@ public class BookingController : ControllerBase
     }
 
     [HttpGet("user/{userId}")]
-    [Authorize]
+    [AllowAnonymous]
     public async Task<IActionResult> GetBookingsByUser(string userId)
     {
         var result = await _bookingService.GetBookingsByUser(userId);
@@ -96,5 +96,12 @@ public class BookingController : ControllerBase
     {
         var result = await _bookingService.CalculateFare(request);
         return Ok(result);
+    }
+    [HttpPut("flight/{flightId}/cancel")]
+    [Authorize(Roles = "ADMIN,AIRLINE_STAFF")]
+    public async Task<IActionResult> CancelBookingsByFlight(int flightId)
+    {
+        var result = await _bookingService.CancelBookingsByFlight(flightId);
+        return Ok(new { message = $"Cancelled {result} bookings for flight {flightId}" });
     }
 }

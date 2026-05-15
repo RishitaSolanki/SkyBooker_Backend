@@ -11,7 +11,8 @@ public class UpdateFlightDto
     public FlightStatus? Status { get; set; }
 
     [Range(0, 100000)]
-    public decimal? BasePrice { get; set; }
+    public decimal? BusinessPrice { get; set; }
+    public decimal? EconomyPrice { get; set; }
 
     public DateTime? DepartureTime { get; set; }
 

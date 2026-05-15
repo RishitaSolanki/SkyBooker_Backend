@@ -1,0 +1,6 @@
+d:\SkyBooker_Backend\obj\Debug\net10.0\JwtGen.csproj.AssemblyReference.cache
+d:\SkyBooker_Backend\obj\Debug\net10.0\JwtGen.GeneratedMSBuildEditorConfig.editorconfig
+d:\SkyBooker_Backend\obj\Debug\net10.0\JwtGen.AssemblyInfoInputs.cache
+d:\SkyBooker_Backend\obj\Debug\net10.0\JwtGen.AssemblyInfo.cs
+d:\SkyBooker_Backend\obj\Debug\net10.0\JwtGen.csproj.CoreCompileInputs.cache
+d:\SkyBooker_Backend\obj\Debug\net10.0\JwtGen.sourcelink.json

@@ -1,0 +1,112 @@
+version: "1"
+
+databases:
+  - name: skybooker-db
+    databaseName: skybooker
+    user: skybooker
+    plan: free
+
+services:
+  # 1. AuthService
+  - type: web
+    name: skybooker-auth
+    env: dotnet
+    plan: free
+    buildCommand: dotnet publish SkyBooker/SkyBooker.AuthService -c Release -o ./out
+    startCommand: dotnet ./out/SkyBooker.AuthService.dll
+    envVars:
+      - key: ConnectionStrings__DefaultConnection
+        fromDatabase:
+          name: skybooker-db
+          property: connectionString
+
+  # 2. FlightService
+  - type: web
+    name: skybooker-flight
+    env: dotnet
+    plan: free
+    buildCommand: dotnet publish SkyBooker/SkyBooker.FlightService -c Release -o ./out
+    startCommand: dotnet ./out/SkyBooker.FlightService.dll
+    envVars:
+      - key: ConnectionStrings__DefaultConnection
+        fromDatabase:
+          name: skybooker-db
+          property: connectionString
+
+  # 3. BookingService
+  - type: web
+    name: skybooker-booking
+    env: dotnet
+    plan: free
+    buildCommand: dotnet publish SkyBooker/SkyBooker.BookingService -c Release -o ./out
+    startCommand: dotnet ./out/SkyBooker.BookingService.dll
+    envVars:
+      - key: ConnectionStrings__DefaultConnection
+        fromDatabase:
+          name: skybooker-db
+          property: connectionString
+
+  # 4. SeatService
+  - type: web
+    name: skybooker-seat
+    env: dotnet
+    plan: free
+    buildCommand: dotnet publish SkyBooker/SkyBooker.SeatService -c Release -o ./out
+    startCommand: dotnet ./out/SkyBooker.SeatService.dll
+    envVars:
+      - key: ConnectionStrings__DefaultConnection
+        fromDatabase:
+          name: skybooker-db
+          property: connectionString
+
+  # 5. PassengerService
+  - type: web
+    name: skybooker-passenger
+    env: dotnet
+    plan: free
+    buildCommand: dotnet publish SkyBooker/SkyBooker.PassengerService -c Release -o ./out
+    startCommand: dotnet ./out/SkyBooker.PassengerService.dll
+    envVars:
+      - key: ConnectionStrings__DefaultConnection
+        fromDatabase:
+          name: skybooker-db
+          property: connectionString
+
+  # 6. PaymentService
+  - type: web
+    name: skybooker-payment
+    env: dotnet
+    plan: free
+    buildCommand: dotnet publish SkyBooker/SkyBooker.PaymentService -c Release -o ./out
+    startCommand: dotnet ./out/SkyBooker.PaymentService.dll
+    envVars:
+      - key: ConnectionStrings__DefaultConnection
+        fromDatabase:
+          name: skybooker-db
+          property: connectionString
+
+  # 7. AirlineService
+  - type: web
+    name: skybooker-airline
+    env: dotnet
+    plan: free
+    buildCommand: dotnet publish SkyBooker/SkyBooker.AirlineService -c Release -o ./out
+    startCommand: dotnet ./out/SkyBooker.AirlineService.dll
+    envVars:
+      - key: ConnectionStrings__DefaultConnection
+        fromDatabase:
+          name: skybooker-db
+          property: connectionString
+
+  # 8. NotificationService
+  - type: web
+    name: skybooker-notification
+    env: dotnet
+    plan: free
+    buildCommand: dotnet publish SkyBooker/SkyBooker.NotificationService -c Release -o ./out
+    startCommand: dotnet ./out/SkyBooker.NotificationService.dll
+    envVars:
+      - key: ConnectionStrings__DefaultConnection
+        fromDatabase:
+          name: skybooker-db
+          property: connectionString

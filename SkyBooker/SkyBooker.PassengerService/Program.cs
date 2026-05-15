@@ -2,22 +2,21 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
 using SkyBooker.PassengerService.Data;
 using SkyBooker.PassengerService.Repositories;
 using SkyBooker.PassengerService.Services;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Set application URL to use port 5004
-builder.WebHost.UseUrls("http://localhost:5004");
 
 // Add services to the container
 builder.Services.AddControllers();
 
 // Configure DbContext
 builder.Services.AddDbContext<PassengerDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"), x => x.MigrationsHistoryTable("__EFMigrationsHistory_PassengerService")));
 
 // Register Repositories
 builder.Services.AddScoped<IPassengerRepository, PassengerRepository>();
@@ -25,21 +24,27 @@ builder.Services.AddScoped<IPassengerRepository, PassengerRepository>();
 // Register Services
 builder.Services.AddScoped<IPassengerService, PassengerService>();
 
+// Clear default claim type mapping so JWT claims keep their original names
+JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
 // Configure JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
+        options.RequireHttpsMetadata = false;
+        options.SaveToken = true;
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = true,
-            ValidateAudience = true,
+            ValidateIssuer = false,
+            ValidateAudience = false,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"] ?? 
-                    throw new InvalidOperationException("JWT SecretKey not configured")))
+                    throw new InvalidOperationException("JWT SecretKey not configured"))),
+            RoleClaimType = "role"
         };
     });
 
@@ -128,9 +133,12 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// Auto-migrate database on startup
-using var scope = app.Services.CreateScope();
-var dbContext = scope.ServiceProvider.GetRequiredService<PassengerDbContext>();
-await dbContext.Database.MigrateAsync();
+// Create database if it doesn't exist
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<PassengerDbContext>();
+    context.Database.EnsureCreated();
+}
 
 app.Run();
+

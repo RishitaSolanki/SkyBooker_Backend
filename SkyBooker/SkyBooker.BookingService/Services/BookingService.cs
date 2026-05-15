@@ -26,7 +26,7 @@ public class BookingService : IBookingService
             FlightId = request.FlightId,
             PnrCode = pnrCode,
             TripType = request.TripType,
-            Status = "PENDING",
+            Status = "CONFIRMED",
             BaseFare = fareSummary.BaseFare,
             Taxes = fareSummary.Taxes,
             TotalFare = fareSummary.TotalFare,
@@ -91,13 +91,12 @@ public class BookingService : IBookingService
 
     public async Task<FareSummary> CalculateFare(CreateBookingDto request)
     {
-        // Base fare calculation (simplified - in real system would fetch from FlightService)
-        var baseFare = 5000m; // Default base fare
-        var taxes = baseFare * 0.18m; // 18% GST
-        var ancillaryCost = request.LuggageKg * 100m; // 100 per kg extra luggage
-        var totalFare = baseFare + taxes + ancillaryCost;
+        // Use fares provided in request, fallback to defaults if zero
+        var baseFare = request.BaseFare > 0 ? request.BaseFare : 5000m;
+        var taxes = request.Taxes > 0 ? request.Taxes : baseFare * 0.18m;
+        var totalFare = request.TotalFare > 0 ? request.TotalFare : baseFare + taxes;
 
-        return new FareSummary(baseFare, taxes, ancillaryCost, totalFare);
+        return new FareSummary(baseFare, taxes, 0, totalFare);
     }
 
     public async Task<string> GeneratePnr()
@@ -125,6 +124,20 @@ public class BookingService : IBookingService
             .Where(b => b.Status == "PENDING" || b.Status == "CONFIRMED")
             .Select(MapToDto)
             .ToList();
+    }
+
+    public async Task<int> CancelBookingsByFlight(int flightId)
+    {
+        var bookings = await _bookingRepository.FindAllByFlightId(flightId);
+        int count = 0;
+        foreach (var booking in bookings.Where(b => b.Status != "CANCELLED"))
+        {
+            booking.Status = "CANCELLED";
+            await _bookingRepository.Update(booking);
+            count++;
+        }
+        if (count > 0) await _bookingRepository.SaveChangesAsync();
+        return count;
     }
 
     private BookingDto MapToDto(Booking booking)

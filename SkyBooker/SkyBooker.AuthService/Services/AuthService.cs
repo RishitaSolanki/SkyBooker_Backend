@@ -26,8 +26,13 @@ namespace SkyBooker.AuthService.Services
 
         public async Task<AuthResponse> RegisterAsync(RegisterRequest request)
         {
+            Console.WriteLine($"[REGISTER] Attempting to register user: {request.Email}");
+            
             if (await _userRepository.ExistsByEmailAsync(request.Email))
+            {
+                Console.WriteLine($"[REGISTER] Email already exists: {request.Email}");
                 throw new Exception("Email already exists");
+            }
 
             var user = new User
             {
@@ -38,9 +43,11 @@ namespace SkyBooker.AuthService.Services
             };
 
             user.PasswordHash = _passwordHasher.HashPassword(user, request.Password);
+            Console.WriteLine($"[REGISTER] User created with ID: {user.UserId}, PasswordHash length: {user.PasswordHash.Length}");
 
             await _userRepository.AddAsync(user);
             await _userRepository.SaveChangesAsync();
+            Console.WriteLine($"[REGISTER] User saved to database successfully");
 
             var token = GenerateJwtToken(user);
 
@@ -54,17 +61,31 @@ namespace SkyBooker.AuthService.Services
 
         public async Task<AuthResponse> LoginAsync(LoginRequest request)
         {
+            Console.WriteLine($"[LOGIN] Attempting to login user: {request.Email}");
+            
             var user = await _userRepository.FindByEmailAsync(request.Email);
 
             if (user == null)
+            {
+                Console.WriteLine($"[LOGIN] User not found: {request.Email}");
                 throw new Exception("Invalid credentials");
+            }
+
+            Console.WriteLine($"[LOGIN] User found: {user.UserId}, Email: {user.Email}");
+            Console.WriteLine($"[LOGIN] Stored PasswordHash length: {user.PasswordHash.Length}");
+            Console.WriteLine($"[LOGIN] Provided password length: {request.Password.Length}");
 
             var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
+            Console.WriteLine($"[LOGIN] Password verification result: {result}");
 
             if (result == PasswordVerificationResult.Failed)
+            {
+                Console.WriteLine($"[LOGIN] Password verification failed for user: {request.Email}");
                 throw new Exception("Invalid credentials");
+            }
 
             var token = GenerateJwtToken(user);
+            Console.WriteLine($"[LOGIN] Login successful for user: {request.Email}");
 
             return new AuthResponse
             {
@@ -185,7 +206,8 @@ namespace SkyBooker.AuthService.Services
             {
                 new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, user.Role.ToUpper())
+                new Claim(ClaimTypes.Role, user.Role.ToUpper()),
+                new Claim("role", user.Role.ToUpper())
             };
 
             var token = new JwtSecurityToken(

@@ -116,7 +116,7 @@ public class SeatService : ISeatService
             return ApiResponse<bool>.Failure("Seat not found", 404);
         }
 
-        if (seat.Status != "AVAILABLE")
+        if (!string.Equals(seat.Status, "AVAILABLE", StringComparison.OrdinalIgnoreCase))
         {
             return ApiResponse<bool>.Failure("Seat is not available", 400);
         }

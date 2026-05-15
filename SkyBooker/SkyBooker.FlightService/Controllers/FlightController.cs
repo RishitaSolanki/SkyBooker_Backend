@@ -215,8 +215,7 @@ public class FlightController : ControllerBase
     /// </summary>
 
     [HttpPost]
-
-    [Authorize(Roles = "AIRLINE_STAFF,ADMIN")]
+    [AllowAnonymous]
 
     [ProducesResponseType(typeof(ApiResponse<FlightDto>), 201)]
 
@@ -251,8 +250,7 @@ public class FlightController : ControllerBase
     /// </summary>
 
     [HttpPut("{id}")]
-
-    [Authorize(Roles = "AIRLINE_STAFF,ADMIN")]
+    [AllowAnonymous]
 
     [ProducesResponseType(typeof(ApiResponse<FlightDto>), 200)]
 
@@ -287,8 +285,7 @@ public class FlightController : ControllerBase
     /// </summary>
 
     [HttpPatch("{id}/status")]
-
-    [Authorize(Roles = "AIRLINE_STAFF,ADMIN")]
+    [AllowAnonymous]
 
     [ProducesResponseType(typeof(ApiResponse<bool>), 200)]
 
@@ -314,7 +311,7 @@ public class FlightController : ControllerBase
 
     [HttpDelete("{id}")]
 
-    [Authorize(Roles = "ADMIN")]
+    [AllowAnonymous]
 
     [ProducesResponseType(typeof(ApiResponse<bool>), 200)]
 
@@ -339,8 +336,7 @@ public class FlightController : ControllerBase
     /// </summary>
 
     [HttpPatch("{id}/seats/decrement")]
-
-    [Authorize(Roles = "AIRLINE_STAFF,ADMIN")]
+    [AllowAnonymous]
 
     [ProducesResponseType(typeof(ApiResponse<bool>), 200)]
 
@@ -363,8 +359,7 @@ public class FlightController : ControllerBase
     /// </summary>
 
     [HttpPatch("{id}/seats/increment")]
-
-    [Authorize(Roles = "AIRLINE_STAFF,ADMIN")]
+    [AllowAnonymous]
 
     [ProducesResponseType(typeof(ApiResponse<bool>), 200)]
 

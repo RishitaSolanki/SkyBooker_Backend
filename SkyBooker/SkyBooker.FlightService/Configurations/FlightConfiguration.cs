@@ -31,7 +31,10 @@ public class FlightConfiguration : IEntityTypeConfiguration<Flight>
             .IsRequired()
             .HasMaxLength(50);
 
-        builder.Property(f => f.BasePrice)
+        builder.Property(f => f.BusinessPrice)
+            .HasColumnType("decimal(10,2)");
+
+        builder.Property(f => f.EconomyPrice)
             .HasColumnType("decimal(10,2)");
 
         builder.Property(f => f.CreatedAt)
