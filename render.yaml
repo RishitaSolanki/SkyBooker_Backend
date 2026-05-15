@@ -10,10 +10,10 @@ services:
   # 1. AuthService
   - type: web
     name: skybooker-auth
-    env: dotnet
+    env: docker
     plan: free
-    buildCommand: dotnet publish SkyBooker/SkyBooker.AuthService -c Release -o ./out
-    startCommand: dotnet ./out/SkyBooker.AuthService.dll
+    dockerContext: .
+    dockerfilePath: SkyBooker/SkyBooker.AuthService/Dockerfile
     envVars:
       - key: ConnectionStrings__DefaultConnection
         fromDatabase:
@@ -23,10 +23,10 @@ services:
   # 2. FlightService
   - type: web
     name: skybooker-flight
-    env: dotnet
+    env: docker
     plan: free
-    buildCommand: dotnet publish SkyBooker/SkyBooker.FlightService -c Release -o ./out
-    startCommand: dotnet ./out/SkyBooker.FlightService.dll
+    dockerContext: .
+    dockerfilePath: SkyBooker/SkyBooker.FlightService/Dockerfile
     envVars:
       - key: ConnectionStrings__DefaultConnection
         fromDatabase:
@@ -36,10 +36,10 @@ services:
   # 3. BookingService
   - type: web
     name: skybooker-booking
-    env: dotnet
+    env: docker
     plan: free
-    buildCommand: dotnet publish SkyBooker/SkyBooker.BookingService -c Release -o ./out
-    startCommand: dotnet ./out/SkyBooker.BookingService.dll
+    dockerContext: .
+    dockerfilePath: SkyBooker/SkyBooker.BookingService/Dockerfile
     envVars:
       - key: ConnectionStrings__DefaultConnection
         fromDatabase:
@@ -49,10 +49,10 @@ services:
   # 4. SeatService
   - type: web
     name: skybooker-seat
-    env: dotnet
+    env: docker
     plan: free
-    buildCommand: dotnet publish SkyBooker/SkyBooker.SeatService -c Release -o ./out
-    startCommand: dotnet ./out/SkyBooker.SeatService.dll
+    dockerContext: .
+    dockerfilePath: SkyBooker/SkyBooker.SeatService/Dockerfile
     envVars:
       - key: ConnectionStrings__DefaultConnection
         fromDatabase:
@@ -62,10 +62,10 @@ services:
   # 5. PassengerService
   - type: web
     name: skybooker-passenger
-    env: dotnet
+    env: docker
     plan: free
-    buildCommand: dotnet publish SkyBooker/SkyBooker.PassengerService -c Release -o ./out
-    startCommand: dotnet ./out/SkyBooker.PassengerService.dll
+    dockerContext: .
+    dockerfilePath: SkyBooker/SkyBooker.PassengerService/Dockerfile
     envVars:
       - key: ConnectionStrings__DefaultConnection
         fromDatabase:
@@ -75,10 +75,10 @@ services:
   # 6. PaymentService
   - type: web
     name: skybooker-payment
-    env: dotnet
+    env: docker
     plan: free
-    buildCommand: dotnet publish SkyBooker/SkyBooker.PaymentService -c Release -o ./out
-    startCommand: dotnet ./out/SkyBooker.PaymentService.dll
+    dockerContext: .
+    dockerfilePath: SkyBooker/SkyBooker.PaymentService/Dockerfile
     envVars:
       - key: ConnectionStrings__DefaultConnection
         fromDatabase:
@@ -88,10 +88,10 @@ services:
   # 7. AirlineService
   - type: web
     name: skybooker-airline
-    env: dotnet
+    env: docker
     plan: free
-    buildCommand: dotnet publish SkyBooker/SkyBooker.AirlineService -c Release -o ./out
-    startCommand: dotnet ./out/SkyBooker.AirlineService.dll
+    dockerContext: .
+    dockerfilePath: SkyBooker/SkyBooker.AirlineService/Dockerfile
     envVars:
       - key: ConnectionStrings__DefaultConnection
         fromDatabase:
@@ -101,10 +101,10 @@ services:
   # 8. NotificationService
   - type: web
     name: skybooker-notification
-    env: dotnet
+    env: docker
     plan: free
-    buildCommand: dotnet publish SkyBooker/SkyBooker.NotificationService -c Release -o ./out
-    startCommand: dotnet ./out/SkyBooker.NotificationService.dll
+    dockerContext: .
+    dockerfilePath: SkyBooker/SkyBooker.NotificationService/Dockerfile
     envVars:
       - key: ConnectionStrings__DefaultConnection
         fromDatabase:
