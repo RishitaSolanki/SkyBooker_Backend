@@ -2,22 +2,21 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
 using SkyBooker.BookingService.Data;
 using SkyBooker.BookingService.Repositories;
 using SkyBooker.BookingService.Services;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Set application URL to use port 5003
-builder.WebHost.UseUrls("http://localhost:5003");
 
 // Add services to the container
 builder.Services.AddControllers();
 
 // Configure DbContext
 builder.Services.AddDbContext<BookingDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"), x => x.MigrationsHistoryTable("__EFMigrationsHistory_BookingService")));
 
 // Register Repositories
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
@@ -25,21 +24,27 @@ builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 // Register Services
 builder.Services.AddScoped<IBookingService, BookingService>();
 
+// Clear default claim type mapping so JWT claims keep their original names
+JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
 // Configure JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
+        options.RequireHttpsMetadata = false;
+        options.SaveToken = true;
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = false,
             ValidateIssuerSigningKey = true,
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"] ?? 
-                    throw new InvalidOperationException("JWT SecretKey not configured")))
+                    throw new InvalidOperationException("JWT SecretKey not configured"))),
+            RoleClaimType = "role"
         };
     });
 
@@ -129,9 +134,12 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// Auto-migrate database on startup
-using var scope = app.Services.CreateScope();
-var dbContext = scope.ServiceProvider.GetRequiredService<BookingDbContext>();
-await dbContext.Database.MigrateAsync();
+// Create database if it doesn't exist
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<BookingDbContext>();
+    context.Database.EnsureCreated();
+}
 
 app.Run();
+

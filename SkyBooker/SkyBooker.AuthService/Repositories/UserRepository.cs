@@ -47,22 +47,27 @@ namespace SkyBooker.AuthService.Repositories
 
         public async Task AddAsync(User user)
         {
+            Console.WriteLine($"[REPOSITORY] Adding user to context: {user.UserId}");
             await _context.Users.AddAsync(user);
         }
 
         public async Task UpdateAsync(User user)
         {
+            Console.WriteLine($"[REPOSITORY] Updating user: {user.UserId}");
             _context.Users.Update(user);
         }
 
         public async Task DeleteAsync(User user)
         {
+            Console.WriteLine($"[REPOSITORY] Deleting user: {user.UserId}");
             _context.Users.Remove(user);
         }
 
         public async Task SaveChangesAsync()
         {
-            await _context.SaveChangesAsync();
+            Console.WriteLine($"[REPOSITORY] Attempting to save changes to database");
+            var result = await _context.SaveChangesAsync();
+            Console.WriteLine($"[REPOSITORY] SaveChangesAsync completed. Rows affected: {result}");
         }
     }
 }

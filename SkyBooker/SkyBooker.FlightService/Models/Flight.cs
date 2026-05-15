@@ -44,7 +44,10 @@ public class Flight
     public int AvailableSeats { get; set; }
 
     [Column(TypeName = "decimal(10,2)")]
-    public decimal BasePrice { get; set; }
+    public decimal BusinessPrice { get; set; }
+
+    [Column(TypeName = "decimal(10,2)")]
+    public decimal EconomyPrice { get; set; }
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

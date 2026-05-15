@@ -15,6 +15,7 @@ public class FlightDto
     public string AircraftType { get; set; } = string.Empty;
     public int TotalSeats { get; set; }
     public int AvailableSeats { get; set; }
-    public decimal BasePrice { get; set; }
+    public decimal BusinessPrice { get; set; }
+    public decimal EconomyPrice { get; set; }
     public DateTime CreatedAt { get; set; }
 }

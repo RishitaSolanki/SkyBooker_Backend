@@ -135,6 +135,48 @@ public class PaymentController : ControllerBase
             return NotFound(new { message = "No payments found for this user" });
         return Ok(result);
     }
+
+    [HttpPost("create-order")]
+    [AllowAnonymous]
+    public async Task<IActionResult> CreateOrder([FromBody] RazorpayOrderRequest request)
+    {
+        try
+        {
+            var orderId = await _paymentService.CreateRazorpayOrder(request.Amount, request.Currency);
+            var keyId = await _paymentService.GetRazorpayKeyId();
+            return Ok(new { orderId, keyId });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    [HttpPost("verify")]
+    [AllowAnonymous]
+    public async Task<IActionResult> VerifyPayment([FromBody] RazorpayVerifyRequest request)
+    {
+        var isValid = await _paymentService.VerifyRazorpayPayment(request.OrderId, request.PaymentId, request.Signature);
+        if (isValid)
+        {
+            // Here you would typically also update the payment status in the DB
+            return Ok(new { status = "success" });
+        }
+        return BadRequest(new { status = "failure" });
+    }
+}
+
+public class RazorpayOrderRequest
+{
+    public decimal Amount { get; set; }
+    public string Currency { get; set; } = "INR";
+}
+
+public class RazorpayVerifyRequest
+{
+    public string OrderId { get; set; } = string.Empty;
+    public string PaymentId { get; set; } = string.Empty;
+    public string Signature { get; set; } = string.Empty;
 }
 
 public class ProcessPaymentDto

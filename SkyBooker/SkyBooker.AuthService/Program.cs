@@ -14,7 +14,7 @@ builder.Services.AddControllers();
 
 // Database - SQLite
 builder.Services.AddDbContext<UsersDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"), x => x.MigrationsHistoryTable("__EFMigrationsHistory_AuthService")));
 
 // Services
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -115,7 +115,7 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = "swagger";
 });
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
 app.UseCors("AllowAll");
 

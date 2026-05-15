@@ -14,4 +14,5 @@ public interface IBookingService
     Task<FareSummary> CalculateFare(CreateBookingDto request);
     Task<string> GeneratePnr();
     Task<List<BookingDto>> GetUpcomingBookings(string userId);
+    Task<int> CancelBookingsByFlight(int flightId);
 }

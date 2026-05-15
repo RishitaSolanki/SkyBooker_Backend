@@ -156,3 +156,5 @@ D:\SkyBooker_Backend\SkyBooker\SkyBooker.AirlineService\obj\Debug\net10.0\refint
 D:\SkyBooker_Backend\SkyBooker\SkyBooker.AirlineService\obj\Debug\net10.0\SkyBooker.AirlineService.pdb
 D:\SkyBooker_Backend\SkyBooker\SkyBooker.AirlineService\obj\Debug\net10.0\SkyBooker.AirlineService.genruntimeconfig.cache
 D:\SkyBooker_Backend\SkyBooker\SkyBooker.AirlineService\obj\Debug\net10.0\ref\SkyBooker.AirlineService.dll
+D:\SkyBooker_Backend\SkyBooker\SkyBooker.AirlineService\bin\Debug\net10.0\Npgsql.dll
+D:\SkyBooker_Backend\SkyBooker\SkyBooker.AirlineService\bin\Debug\net10.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll

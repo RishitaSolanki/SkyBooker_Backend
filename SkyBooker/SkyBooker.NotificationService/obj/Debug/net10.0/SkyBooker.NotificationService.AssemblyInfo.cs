@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SkyBooker.NotificationService")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7728c9e35e984e9e04c4d0ca22ab53ddcbb75b84")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+70beeff7db998a94c852f413c006645623519c4b")]
 [assembly: System.Reflection.AssemblyProductAttribute("SkyBooker.NotificationService")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SkyBooker.NotificationService")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

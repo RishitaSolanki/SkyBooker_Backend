@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SkyBooker.FlightService.Data;
 
 #nullable disable
@@ -15,40 +16,46 @@ namespace SkyBooker.FlightService.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "10.0.7");
+            modelBuilder
+                .HasAnnotation("ProductVersion", "10.0.7")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("SkyBooker.FlightService.Models.Airline", b =>
                 {
                     b.Property<int>("AirlineId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("AirlineId"));
 
                     b.Property<string>("AirlineName")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("Country")
                         .HasMaxLength(100)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("IATACode")
                         .IsRequired()
                         .HasMaxLength(3)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(3)");
 
                     b.Property<string>("ICAOCode")
                         .HasMaxLength(4)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(4)");
 
                     b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("boolean")
                         .HasDefaultValue(true);
 
                     b.Property<string>("LogoUrl")
                         .HasMaxLength(500)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(500)");
 
                     b.HasKey("AirlineId");
 
@@ -110,31 +117,33 @@ namespace SkyBooker.FlightService.Migrations
                 {
                     b.Property<int>("AirportId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("AirportId"));
 
                     b.Property<string>("AirportName")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(200)");
 
                     b.Property<string>("City")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("Country")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("IATACode")
                         .IsRequired()
                         .HasMaxLength(3)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(3)");
 
                     b.Property<string>("ICAOCode")
                         .HasMaxLength(4)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(4)");
 
                     b.Property<decimal?>("Latitude")
                         .HasColumnType("decimal(9,6)");
@@ -144,7 +153,7 @@ namespace SkyBooker.FlightService.Migrations
 
                     b.Property<string>("Timezone")
                         .HasMaxLength(50)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(50)");
 
                     b.HasKey("AirportId");
 
@@ -257,61 +266,66 @@ namespace SkyBooker.FlightService.Migrations
                 {
                     b.Property<int>("FlightId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("FlightId"));
 
                     b.Property<string>("AircraftType")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<int>("AirlineId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("ArrivalTime")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("AvailableSeats")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer");
 
-                    b.Property<decimal>("BasePrice")
+                    b.Property<decimal>("BusinessPrice")
                         .HasColumnType("decimal(10,2)");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
+                        .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<DateTime>("DepartureTime")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DestinationAirportCode")
                         .IsRequired()
                         .HasMaxLength(3)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(3)");
 
                     b.Property<int>("DurationMinutes")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("EconomyPrice")
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<string>("FlightNumber")
                         .IsRequired()
                         .HasMaxLength(10)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(10)");
 
                     b.Property<string>("OriginAirportCode")
                         .IsRequired()
                         .HasMaxLength(3)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(3)");
 
                     b.Property<int>("Status")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("integer")
                         .HasDefaultValue(0);
 
                     b.Property<int>("TotalSeats")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("FlightId");
 
@@ -336,13 +350,14 @@ namespace SkyBooker.FlightService.Migrations
                             FlightId = 1,
                             AircraftType = "Boeing 787",
                             AirlineId = 1,
-                            ArrivalTime = new DateTime(2026, 5, 4, 8, 30, 0, 0, DateTimeKind.Unspecified),
+                            ArrivalTime = new DateTime(2026, 5, 14, 8, 30, 0, 0, DateTimeKind.Unspecified),
                             AvailableSeats = 180,
-                            BasePrice = 5500.00m,
+                            BusinessPrice = 8500.00m,
                             CreatedAt = new DateTime(2026, 4, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DepartureTime = new DateTime(2026, 5, 4, 6, 0, 0, 0, DateTimeKind.Unspecified),
+                            DepartureTime = new DateTime(2026, 5, 14, 6, 0, 0, 0, DateTimeKind.Unspecified),
                             DestinationAirportCode = "BOM",
                             DurationMinutes = 150,
+                            EconomyPrice = 5500.00m,
                             FlightNumber = "AI101",
                             OriginAirportCode = "DEL",
                             Status = 0,
@@ -353,17 +368,72 @@ namespace SkyBooker.FlightService.Migrations
                             FlightId = 2,
                             AircraftType = "Airbus A320",
                             AirlineId = 2,
-                            ArrivalTime = new DateTime(2026, 5, 4, 11, 45, 0, 0, DateTimeKind.Unspecified),
+                            ArrivalTime = new DateTime(2026, 5, 14, 11, 45, 0, 0, DateTimeKind.Unspecified),
                             AvailableSeats = 120,
-                            BasePrice = 4200.00m,
+                            BusinessPrice = 6200.00m,
                             CreatedAt = new DateTime(2026, 4, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DepartureTime = new DateTime(2026, 5, 4, 10, 0, 0, 0, DateTimeKind.Unspecified),
+                            DepartureTime = new DateTime(2026, 5, 14, 10, 0, 0, 0, DateTimeKind.Unspecified),
                             DestinationAirportCode = "BLR",
                             DurationMinutes = 105,
+                            EconomyPrice = 4200.00m,
                             FlightNumber = "6E202",
                             OriginAirportCode = "BOM",
                             Status = 0,
                             TotalSeats = 180
+                        },
+                        new
+                        {
+                            FlightId = 3,
+                            AircraftType = "Airbus A321",
+                            AirlineId = 4,
+                            ArrivalTime = new DateTime(2026, 5, 14, 20, 30, 0, 0, DateTimeKind.Unspecified),
+                            AvailableSeats = 45,
+                            BusinessPrice = 9200.00m,
+                            CreatedAt = new DateTime(2026, 4, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DepartureTime = new DateTime(2026, 5, 14, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            DestinationAirportCode = "BOM",
+                            DurationMinutes = 150,
+                            EconomyPrice = 6200.00m,
+                            FlightNumber = "UK303",
+                            OriginAirportCode = "DEL",
+                            Status = 0,
+                            TotalSeats = 200
+                        },
+                        new
+                        {
+                            FlightId = 4,
+                            AircraftType = "Boeing 737",
+                            AirlineId = 3,
+                            ArrivalTime = new DateTime(2026, 5, 15, 10, 0, 0, 0, DateTimeKind.Unspecified),
+                            AvailableSeats = 90,
+                            BusinessPrice = 7200.00m,
+                            CreatedAt = new DateTime(2026, 4, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DepartureTime = new DateTime(2026, 5, 15, 7, 30, 0, 0, DateTimeKind.Unspecified),
+                            DestinationAirportCode = "BOM",
+                            DurationMinutes = 150,
+                            EconomyPrice = 4800.00m,
+                            FlightNumber = "SG404",
+                            OriginAirportCode = "DEL",
+                            Status = 0,
+                            TotalSeats = 180
+                        },
+                        new
+                        {
+                            FlightId = 5,
+                            AircraftType = "Boeing 787",
+                            AirlineId = 1,
+                            ArrivalTime = new DateTime(2026, 5, 14, 23, 30, 0, 0, DateTimeKind.Unspecified),
+                            AvailableSeats = 200,
+                            BusinessPrice = 8200.00m,
+                            CreatedAt = new DateTime(2026, 4, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DepartureTime = new DateTime(2026, 5, 14, 21, 0, 0, 0, DateTimeKind.Unspecified),
+                            DestinationAirportCode = "DEL",
+                            DurationMinutes = 150,
+                            EconomyPrice = 5200.00m,
+                            FlightNumber = "AI102",
+                            OriginAirportCode = "BOM",
+                            Status = 0,
+                            TotalSeats = 250
                         });
                 });
 

@@ -7,6 +7,9 @@ public class CreateBookingDto
     public string TripType { get; set; } = "ONE_WAY";
     public string MealPreference { get; set; } = "Veg";
     public int LuggageKg { get; set; } = 15;
+    public decimal BaseFare { get; set; }
+    public decimal Taxes { get; set; }
+    public decimal TotalFare { get; set; }
     public string ContactEmail { get; set; } = string.Empty;
     public string ContactPhone { get; set; } = string.Empty;
 }

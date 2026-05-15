@@ -18,4 +18,7 @@ public interface IPaymentService
     Task<PaymentDto?> GetPaymentStatus(string paymentId);
     Task<List<PaymentDto>> GetPaymentStatusByUserId(string userId);
     Task<decimal> GetRevenue(DateTime startDate, DateTime endDate);
+    Task<string> CreateRazorpayOrder(decimal amount, string currency = "INR");
+    Task<bool> VerifyRazorpayPayment(string orderId, string paymentId, string signature);
+    Task<string> GetRazorpayKeyId();
 }

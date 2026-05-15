@@ -1,16 +1,22 @@
 using SkyBooker.PaymentService.DTOs;
 using SkyBooker.PaymentService.Entities;
+using PaymentEntity = SkyBooker.PaymentService.Entities.Payment;
 using SkyBooker.PaymentService.Repositories;
+using Razorpay.Api;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace SkyBooker.PaymentService.Services;
 
 public class PaymentService : IPaymentService
 {
     private readonly IPaymentRepository _repository;
+    private readonly IConfiguration _configuration;
 
-    public PaymentService(IPaymentRepository repository)
+    public PaymentService(IPaymentRepository repository, IConfiguration configuration)
     {
         _repository = repository;
+        _configuration = configuration;
     }
 
     public async Task<PaymentDto?> GetPaymentById(string paymentId)
@@ -56,7 +62,7 @@ public class PaymentService : IPaymentService
 
     public async Task<PaymentDto?> InitiatePayment(CreatePaymentDto request)
     {
-        var payment = new Payment
+        var payment = new PaymentEntity
         {
             PaymentId = Guid.NewGuid().ToString(),
             BookingId = request.BookingId,
@@ -123,7 +129,47 @@ public class PaymentService : IPaymentService
         return payments.Where(p => p.Status == "PAID").Sum(p => p.Amount);
     }
 
-    private PaymentDto MapToDto(Payment payment)
+    public async Task<string> CreateRazorpayOrder(decimal amount, string currency = "INR")
+    {
+        string keyId = _configuration["Razorpay:KeyId"];
+        string keySecret = _configuration["Razorpay:KeySecret"];
+
+        RazorpayClient client = new RazorpayClient(keyId, keySecret);
+
+        Dictionary<string, object> options = new Dictionary<string, object>();
+        options.Add("amount", (int)(amount * 100)); // amount in the smallest currency unit
+        options.Add("receipt", Guid.NewGuid().ToString().Substring(0, 8));
+        options.Add("currency", currency);
+        options.Add("payment_capture", "1"); // 1 for auto capture
+
+        Order order = client.Order.Create(options);
+        return order["id"].ToString();
+    }
+
+    public async Task<bool> VerifyRazorpayPayment(string orderId, string paymentId, string signature)
+    {
+        string keySecret = _configuration["Razorpay:KeySecret"];
+        string payload = orderId + "|" + paymentId;
+        
+        string expectedSignature = CalculateHMACSHA256(payload, keySecret);
+        return expectedSignature == signature;
+    }
+
+    private string CalculateHMACSHA256(string data, string key)
+    {
+        using (var hmacsha256 = new HMACSHA256(Encoding.UTF8.GetBytes(key)))
+        {
+            var hash = hmacsha256.ComputeHash(Encoding.UTF8.GetBytes(data));
+            return BitConverter.ToString(hash).Replace("-", "").ToLower();
+        }
+    }
+
+    public Task<string> GetRazorpayKeyId()
+    {
+        return Task.FromResult(_configuration["Razorpay:KeyId"]);
+    }
+
+    private PaymentDto MapToDto(PaymentEntity payment)
     {
         return new PaymentDto
         {

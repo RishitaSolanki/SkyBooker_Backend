@@ -23,7 +23,7 @@ public class SeatController : ControllerBase
     /// Get seat by ID
     /// </summary>
     [HttpGet("{id}")]
-    [Authorize]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(ApiResponse<SeatDto>), 200)]
     [ProducesResponseType(typeof(ApiResponse<SeatDto>), 404)]
     public async Task<IActionResult> GetSeatById(int id)
@@ -36,7 +36,7 @@ public class SeatController : ControllerBase
     /// Get all seats for a flight
     /// </summary>
     [HttpGet("flight/{flightId}")]
-    [Authorize]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(ApiResponse<List<SeatDto>>), 200)]
     public async Task<IActionResult> GetSeatsByFlightId(int flightId)
     {
@@ -48,7 +48,7 @@ public class SeatController : ControllerBase
     /// Get seats by class for a flight
     /// </summary>
     [HttpGet("flight/{flightId}/class/{seatClass}")]
-    [Authorize]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(ApiResponse<List<SeatDto>>), 200)]
     public async Task<IActionResult> GetSeatsByClass(int flightId, string seatClass)
     {
@@ -60,7 +60,7 @@ public class SeatController : ControllerBase
     /// Get available seats for a flight
     /// </summary>
     [HttpGet("flight/{flightId}/available")]
-    [Authorize]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(ApiResponse<List<SeatDto>>), 200)]
     public async Task<IActionResult> GetAvailableSeats(int flightId)
     {
@@ -72,7 +72,7 @@ public class SeatController : ControllerBase
     /// Get available seats by class for a flight
     /// </summary>
     [HttpGet("flight/{flightId}/available/class/{seatClass}")]
-    [Authorize]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(ApiResponse<List<SeatDto>>), 200)]
     public async Task<IActionResult> GetAvailableByClass(int flightId, string seatClass)
     {
@@ -84,7 +84,7 @@ public class SeatController : ControllerBase
     /// Count available seats by class for a flight
     /// </summary>
     [HttpGet("flight/{flightId}/count/class/{seatClass}")]
-    [Authorize]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(ApiResponse<int>), 200)]
     public async Task<IActionResult> CountAvailableByClass(int flightId, string seatClass)
     {
@@ -96,7 +96,7 @@ public class SeatController : ControllerBase
     /// Get seat map for a flight (grouped by class)
     /// </summary>
     [HttpGet("flight/{flightId}/map")]
-    [Authorize]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(ApiResponse<Dictionary<string, List<SeatDto>>>), 200)]
     public async Task<IActionResult> GetSeatMap(int flightId)
     {
@@ -134,7 +134,7 @@ public class SeatController : ControllerBase
     /// Hold a seat (for booking)
     /// </summary>
     [HttpPatch("{id}/hold")]
-    [Authorize]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(ApiResponse<bool>), 200)]
     [ProducesResponseType(typeof(ApiResponse<bool>), 404)]
     public async Task<IActionResult> HoldSeat(int id)
@@ -147,7 +147,7 @@ public class SeatController : ControllerBase
     /// Release a held seat
     /// </summary>
     [HttpPatch("{id}/release")]
-    [Authorize]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(ApiResponse<bool>), 200)]
     [ProducesResponseType(typeof(ApiResponse<bool>), 404)]
     public async Task<IActionResult> ReleaseSeat(int id)
@@ -160,7 +160,7 @@ public class SeatController : ControllerBase
     /// Confirm a held seat (after payment)
     /// </summary>
     [HttpPatch("{id}/confirm")]
-    [Authorize]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(ApiResponse<bool>), 200)]
     [ProducesResponseType(typeof(ApiResponse<bool>), 404)]
     public async Task<IActionResult> ConfirmSeat(int id)
