@@ -5,6 +5,9 @@ using SkyBooker.FlightService.DTOs;
 using SkyBooker.FlightService.Models;
 using SkyBooker.FlightService.Repositories.Interfaces;
 using SkyBooker.FlightService.Services.Interfaces;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using System.Net.Http;
 
 namespace SkyBooker.FlightService.Services;
 
@@ -13,15 +16,21 @@ public class FlightService : IFlightService
     private readonly IFlightRepository _flightRepository;
     private readonly IMapper _mapper;
     private readonly ILogger<FlightService> _logger;
+    private readonly IHttpClientFactory _httpClientFactory;
+    private readonly IConfiguration _configuration;
 
     public FlightService(
         IFlightRepository flightRepository,
         IMapper mapper,
-        ILogger<FlightService> logger)
+        ILogger<FlightService> logger,
+        IHttpClientFactory httpClientFactory,
+        IConfiguration configuration)
     {
         _flightRepository = flightRepository;
         _mapper = mapper;
         _logger = logger;
+        _httpClientFactory = httpClientFactory;
+        _configuration = configuration;
     }
 
     public async Task<ApiResponse<FlightDto>> GetFlightByIdAsync(int flightId)
@@ -274,6 +283,18 @@ public class FlightService : IFlightService
             }
 
             await _flightRepository.DeleteAsync(flightId);
+            
+            // Notify Booking Service to cancel all bookings for this flight
+            try 
+            {
+                var client = _httpClientFactory.CreateClient();
+                var bookingServiceUrl = _configuration["ServiceUrls:BookingService"] ?? "http://localhost:5214";
+                await client.PutAsync($"{bookingServiceUrl}/api/booking/flight/{flightId}/cancel", null);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to notify BookingService about deleted flight {FlightId}", flightId);
+            }
 
             _logger.LogInformation("Flight {FlightNumber} deleted successfully", flight.FlightNumber);
             return ApiResponse<bool>.Success(true, "Flight deleted successfully");
@@ -327,10 +348,10 @@ public class FlightService : IFlightService
     private IEnumerable<Flight> ApplyFilters(IEnumerable<Flight> flights, FlightFilterDto filters)
     {
         if (filters.MinPrice.HasValue)
-            flights = flights.Where(f => f.BasePrice >= filters.MinPrice.Value);
+            flights = flights.Where(f => f.EconomyPrice >= filters.MinPrice.Value);
 
         if (filters.MaxPrice.HasValue)
-            flights = flights.Where(f => f.BasePrice <= filters.MaxPrice.Value);
+            flights = flights.Where(f => f.EconomyPrice <= filters.MaxPrice.Value);
 
         if (filters.AirlineId.HasValue)
             flights = flights.Where(f => f.AirlineId == filters.AirlineId.Value);

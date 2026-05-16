@@ -1,0 +1,125 @@
+version: "1"
+
+envVarGroups:
+  - name: skybooker-common
+    envVars:
+      - key: Jwt__Issuer
+        value: SkyBooker
+      - key: Jwt__Audience
+        value: SkyBooker
+      - key: Jwt__SecretKey
+        generateValue: true # Render will generate a random secure key
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+
+databases:
+  - name: skybooker-db
+    databaseName: skybooker
+    user: skybooker
+    plan: free
+
+services:
+  # 1. AuthService
+  - type: web
+    name: skybooker-auth
+    env: docker
+    plan: free
+    dockerContext: .
+    dockerfilePath: SkyBooker/SkyBooker.AuthService/Dockerfile
+    envVars:
+      - fromGroup: skybooker-common
+      - key: ConnectionStrings__DefaultConnection
+        value: "Host=${{skybooker-db.host}};Port=${{skybooker-db.port}};Database=${{skybooker-db.databaseName}};Username=${{skybooker-db.user}};Password=${{skybooker-db.password}};SSL Mode=Require;Trust Server Certificate=true;"
+
+  # 2. FlightService
+  - type: web
+    name: skybooker-flight
+    env: docker
+    plan: free
+    dockerContext: .
+    dockerfilePath: SkyBooker/SkyBooker.FlightService/Dockerfile
+    envVars:
+      - fromGroup: skybooker-common
+      - key: ConnectionStrings__DefaultConnection
+        value: "Host=${{skybooker-db.host}};Port=${{skybooker-db.port}};Database=${{skybooker-db.databaseName}};Username=${{skybooker-db.user}};Password=${{skybooker-db.password}};SSL Mode=Require;Trust Server Certificate=true;"
+      - key: ServiceUrls__BookingService
+        fromService:
+          name: skybooker-booking
+          type: web
+          property: url
+
+  # 3. BookingService
+  - type: web
+    name: skybooker-booking
+    env: docker
+    plan: free
+    dockerContext: .
+    dockerfilePath: SkyBooker/SkyBooker.BookingService/Dockerfile
+    envVars:
+      - fromGroup: skybooker-common
+      - key: ConnectionStrings__DefaultConnection
+        value: "Host=${{skybooker-db.host}};Port=${{skybooker-db.port}};Database=${{skybooker-db.databaseName}};Username=${{skybooker-db.user}};Password=${{skybooker-db.password}};SSL Mode=Require;Trust Server Certificate=true;"
+
+  # 4. SeatService
+  - type: web
+    name: skybooker-seat
+    env: docker
+    plan: free
+    dockerContext: .
+    dockerfilePath: SkyBooker/SkyBooker.SeatService/Dockerfile
+    envVars:
+      - fromGroup: skybooker-common
+      - key: ConnectionStrings__DefaultConnection
+        value: "Host=${{skybooker-db.host}};Port=${{skybooker-db.port}};Database=${{skybooker-db.databaseName}};Username=${{skybooker-db.user}};Password=${{skybooker-db.password}};SSL Mode=Require;Trust Server Certificate=true;"
+
+  # 5. PassengerService
+  - type: web
+    name: skybooker-passenger
+    env: docker
+    plan: free
+    dockerContext: .
+    dockerfilePath: SkyBooker/SkyBooker.PassengerService/Dockerfile
+    envVars:
+      - fromGroup: skybooker-common
+      - key: ConnectionStrings__DefaultConnection
+        value: "Host=${{skybooker-db.host}};Port=${{skybooker-db.port}};Database=${{skybooker-db.databaseName}};Username=${{skybooker-db.user}};Password=${{skybooker-db.password}};SSL Mode=Require;Trust Server Certificate=true;"
+
+  # 6. PaymentService
+  - type: web
+    name: skybooker-payment
+    env: docker
+    plan: free
+    dockerContext: .
+    dockerfilePath: SkyBooker/SkyBooker.PaymentService/Dockerfile
+    envVars:
+      - fromGroup: skybooker-common
+      - key: ConnectionStrings__DefaultConnection
+        value: "Host=${{skybooker-db.host}};Port=${{skybooker-db.port}};Database=${{skybooker-db.databaseName}};Username=${{skybooker-db.user}};Password=${{skybooker-db.password}};SSL Mode=Require;Trust Server Certificate=true;"
+      - key: Razorpay__KeyId
+        sync: false # Render will prompt for this
+      - key: Razorpay__KeySecret
+        sync: false # Render will prompt for this
+
+  # 7. AirlineService
+  - type: web
+    name: skybooker-airline
+    env: docker
+    plan: free
+    dockerContext: .
+    dockerfilePath: SkyBooker/SkyBooker.AirlineService/Dockerfile
+    envVars:
+      - fromGroup: skybooker-common
+      - key: ConnectionStrings__DefaultConnection
+        value: "Host=${{skybooker-db.host}};Port=${{skybooker-db.port}};Database=${{skybooker-db.databaseName}};Username=${{skybooker-db.user}};Password=${{skybooker-db.password}};SSL Mode=Require;Trust Server Certificate=true;"
+
+  # 8. NotificationService
+  - type: web
+    name: skybooker-notification
+    env: docker
+    plan: free
+    dockerContext: .
+    dockerfilePath: SkyBooker/SkyBooker.NotificationService/Dockerfile
+    envVars:
+      - fromGroup: skybooker-common
+      - key: ConnectionStrings__DefaultConnection
+        value: "Host=${{skybooker-db.host}};Port=${{skybooker-db.port}};Database=${{skybooker-db.databaseName}};Username=${{skybooker-db.user}};Password=${{skybooker-db.password}};SSL Mode=Require;Trust Server Certificate=true;"
