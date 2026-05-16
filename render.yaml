@@ -29,7 +29,9 @@ services:
     envVars:
       - fromGroup: skybooker-common
       - key: ConnectionStrings__DefaultConnection
-        value: "Host=${{skybooker-db.host}};Port=${{skybooker-db.port}};Database=${{skybooker-db.databaseName}};Username=${{skybooker-db.user}};Password=${{skybooker-db.password}};SSL Mode=Require;Trust Server Certificate=true;"
+        fromDatabase:
+          name: skybooker-db
+          property: connectionString
 
   # 2. FlightService
   - type: web
@@ -41,7 +43,9 @@ services:
     envVars:
       - fromGroup: skybooker-common
       - key: ConnectionStrings__DefaultConnection
-        value: "Host=${{skybooker-db.host}};Port=${{skybooker-db.port}};Database=${{skybooker-db.databaseName}};Username=${{skybooker-db.user}};Password=${{skybooker-db.password}};SSL Mode=Require;Trust Server Certificate=true;"
+        fromDatabase:
+          name: skybooker-db
+          property: connectionString
       - key: ServiceUrls__BookingService
         fromService:
           name: skybooker-booking
@@ -58,7 +62,9 @@ services:
     envVars:
       - fromGroup: skybooker-common
       - key: ConnectionStrings__DefaultConnection
-        value: "Host=${{skybooker-db.host}};Port=${{skybooker-db.port}};Database=${{skybooker-db.databaseName}};Username=${{skybooker-db.user}};Password=${{skybooker-db.password}};SSL Mode=Require;Trust Server Certificate=true;"
+        fromDatabase:
+          name: skybooker-db
+          property: connectionString
 
   # 4. SeatService
   - type: web
@@ -70,7 +76,9 @@ services:
     envVars:
       - fromGroup: skybooker-common
       - key: ConnectionStrings__DefaultConnection
-        value: "Host=${{skybooker-db.host}};Port=${{skybooker-db.port}};Database=${{skybooker-db.databaseName}};Username=${{skybooker-db.user}};Password=${{skybooker-db.password}};SSL Mode=Require;Trust Server Certificate=true;"
+        fromDatabase:
+          name: skybooker-db
+          property: connectionString
 
   # 5. PassengerService
   - type: web
@@ -82,7 +90,9 @@ services:
     envVars:
       - fromGroup: skybooker-common
       - key: ConnectionStrings__DefaultConnection
-        value: "Host=${{skybooker-db.host}};Port=${{skybooker-db.port}};Database=${{skybooker-db.databaseName}};Username=${{skybooker-db.user}};Password=${{skybooker-db.password}};SSL Mode=Require;Trust Server Certificate=true;"
+        fromDatabase:
+          name: skybooker-db
+          property: connectionString
 
   # 6. PaymentService
   - type: web
@@ -94,7 +104,9 @@ services:
     envVars:
       - fromGroup: skybooker-common
       - key: ConnectionStrings__DefaultConnection
-        value: "Host=${{skybooker-db.host}};Port=${{skybooker-db.port}};Database=${{skybooker-db.databaseName}};Username=${{skybooker-db.user}};Password=${{skybooker-db.password}};SSL Mode=Require;Trust Server Certificate=true;"
+        fromDatabase:
+          name: skybooker-db
+          property: connectionString
       - key: Razorpay__KeyId
         sync: false # Render will prompt for this
       - key: Razorpay__KeySecret
@@ -110,7 +122,9 @@ services:
     envVars:
       - fromGroup: skybooker-common
       - key: ConnectionStrings__DefaultConnection
-        value: "Host=${{skybooker-db.host}};Port=${{skybooker-db.port}};Database=${{skybooker-db.databaseName}};Username=${{skybooker-db.user}};Password=${{skybooker-db.password}};SSL Mode=Require;Trust Server Certificate=true;"
+        fromDatabase:
+          name: skybooker-db
+          property: connectionString
 
   # 8. NotificationService
   - type: web
@@ -122,4 +136,6 @@ services:
     envVars:
       - fromGroup: skybooker-common
       - key: ConnectionStrings__DefaultConnection
-        value: "Host=${{skybooker-db.host}};Port=${{skybooker-db.port}};Database=${{skybooker-db.databaseName}};Username=${{skybooker-db.user}};Password=${{skybooker-db.password}};SSL Mode=Require;Trust Server Certificate=true;"
+        fromDatabase:
+          name: skybooker-db
+          property: connectionString
