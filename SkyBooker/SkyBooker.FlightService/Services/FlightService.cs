@@ -5,6 +5,9 @@ using SkyBooker.FlightService.DTOs;
 using SkyBooker.FlightService.Models;
 using SkyBooker.FlightService.Repositories.Interfaces;
 using SkyBooker.FlightService.Services.Interfaces;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using System.Net.Http;
 
 namespace SkyBooker.FlightService.Services;
 
@@ -14,17 +17,20 @@ public class FlightService : IFlightService
     private readonly IMapper _mapper;
     private readonly ILogger<FlightService> _logger;
     private readonly IHttpClientFactory _httpClientFactory;
+    private readonly IConfiguration _configuration;
 
     public FlightService(
         IFlightRepository flightRepository,
         IMapper mapper,
         ILogger<FlightService> logger,
-        IHttpClientFactory httpClientFactory)
+        IHttpClientFactory httpClientFactory,
+        IConfiguration configuration)
     {
         _flightRepository = flightRepository;
         _mapper = mapper;
         _logger = logger;
         _httpClientFactory = httpClientFactory;
+        _configuration = configuration;
     }
 
     public async Task<ApiResponse<FlightDto>> GetFlightByIdAsync(int flightId)
@@ -282,7 +288,8 @@ public class FlightService : IFlightService
             try 
             {
                 var client = _httpClientFactory.CreateClient();
-                await client.PutAsync($"http://localhost:5214/api/booking/flight/{flightId}/cancel", null);
+                var bookingServiceUrl = _configuration["ServiceUrls:BookingService"] ?? "http://localhost:5214";
+                await client.PutAsync($"{bookingServiceUrl}/api/booking/flight/{flightId}/cancel", null);
             }
             catch (Exception ex)
             {
