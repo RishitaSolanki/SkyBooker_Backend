@@ -14,6 +14,9 @@ builder.Services.AddControllers();
 
 // Database - PostgreSQL
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "";
+var maskedConn = System.Text.RegularExpressions.Regex.Replace(connectionString, "Password=[^;]+", "Password=***");
+Console.WriteLine($"[DATABASE_DEBUG] Connecting with: {maskedConn}");
+
 builder.Services.AddDbContext<UsersDbContext>(options =>
     options.UseNpgsql(ConvertPostgresUri(connectionString), x => x.MigrationsHistoryTable("__EFMigrationsHistory_AuthService")));
 

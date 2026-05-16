@@ -20,6 +20,9 @@ builder.Services.AddHttpClient();
 
 // Configure DbContext
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "";
+var maskedConn = System.Text.RegularExpressions.Regex.Replace(connectionString, "Password=[^;]+", "Password=***");
+Console.WriteLine($"[DATABASE_DEBUG] Connecting with: {maskedConn}");
+
 builder.Services.AddDbContext<FlightDbContext>(options =>
     options.UseNpgsql(ConvertPostgresUri(connectionString), x => x.MigrationsHistoryTable("__EFMigrationsHistory_FlightService")));
 
