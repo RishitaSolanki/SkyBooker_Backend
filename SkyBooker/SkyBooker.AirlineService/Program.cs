@@ -46,7 +46,10 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 // Database configuration
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "";
+var maskedConn = System.Text.RegularExpressions.Regex.Replace(connectionString, "Password=[^;]+", "Password=***");
+Console.WriteLine($"[DATABASE_DEBUG] Connecting with: {maskedConn}");
+
 builder.Services.AddDbContext<AirlineDbContext>(options =>
     options.UseNpgsql(ConvertPostgresUri(connectionString), x => x.MigrationsHistoryTable("__EFMigrationsHistory_AirlineService")));
 
@@ -122,8 +125,11 @@ app.Run();
 
 static string ConvertPostgresUri(string uri)
 {
-    if (string.IsNullOrEmpty(uri) || !uri.StartsWith("postgres://")) return uri;
+    if (string.IsNullOrEmpty(uri)) return uri;
+    if (!uri.StartsWith("postgres://") && !uri.StartsWith("postgresql://")) return uri;
+
     var databaseUri = new Uri(uri);
     var userInfo = databaseUri.UserInfo.Split(':');
-    return $"Host={databaseUri.Host};Port={databaseUri.Port};Database={databaseUri.AbsolutePath.TrimStart('/')};Username={userInfo[0]};Password={userInfo[1]};SSL Mode=Require;Trust Server Certificate=true;";
+    var port = databaseUri.Port == -1 ? 5432 : databaseUri.Port;
+    return $"Host={databaseUri.Host};Port={port};Database={databaseUri.AbsolutePath.TrimStart('/')};Username={userInfo[0]};Password={userInfo[1]};SSL Mode=Require;Trust Server Certificate=true;";
 }
