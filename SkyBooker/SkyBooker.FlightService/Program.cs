@@ -19,8 +19,9 @@ builder.Services.AddControllers();
 builder.Services.AddHttpClient();
 
 // Configure DbContext
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "";
 builder.Services.AddDbContext<FlightDbContext>(options =>
-    options.UseNpgsql(ConvertPostgresUri(builder.Configuration.GetConnectionString("DefaultConnection")), x => x.MigrationsHistoryTable("__EFMigrationsHistory_FlightService")));
+    options.UseNpgsql(ConvertPostgresUri(connectionString), x => x.MigrationsHistoryTable("__EFMigrationsHistory_FlightService")));
 
 // Register Repositories
 builder.Services.AddScoped<IFlightRepository, FlightRepository>();

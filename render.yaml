@@ -31,7 +31,7 @@ services:
       - key: ConnectionStrings__DefaultConnection
         fromDatabase:
           name: skybooker-db
-          property: connectionString
+          property: internalConnectionString
 
   # 2. FlightService
   - type: web
@@ -45,7 +45,7 @@ services:
       - key: ConnectionStrings__DefaultConnection
         fromDatabase:
           name: skybooker-db
-          property: connectionString
+          property: internalConnectionString
       - key: ServiceUrls__BookingService
         fromService:
           name: skybooker-booking
@@ -64,7 +64,7 @@ services:
       - key: ConnectionStrings__DefaultConnection
         fromDatabase:
           name: skybooker-db
-          property: connectionString
+          property: internalConnectionString
 
   # 4. SeatService
   - type: web
@@ -78,7 +78,7 @@ services:
       - key: ConnectionStrings__DefaultConnection
         fromDatabase:
           name: skybooker-db
-          property: connectionString
+          property: internalConnectionString
 
   # 5. PassengerService
   - type: web
@@ -92,7 +92,7 @@ services:
       - key: ConnectionStrings__DefaultConnection
         fromDatabase:
           name: skybooker-db
-          property: connectionString
+          property: internalConnectionString
 
   # 6. PaymentService
   - type: web
@@ -106,7 +106,7 @@ services:
       - key: ConnectionStrings__DefaultConnection
         fromDatabase:
           name: skybooker-db
-          property: connectionString
+          property: internalConnectionString
       - key: Razorpay__KeyId
         sync: false # Render will prompt for this
       - key: Razorpay__KeySecret
@@ -124,7 +124,7 @@ services:
       - key: ConnectionStrings__DefaultConnection
         fromDatabase:
           name: skybooker-db
-          property: connectionString
+          property: internalConnectionString
 
   # 8. NotificationService
   - type: web
@@ -138,4 +138,4 @@ services:
       - key: ConnectionStrings__DefaultConnection
         fromDatabase:
           name: skybooker-db
-          property: connectionString
+          property: internalConnectionString
