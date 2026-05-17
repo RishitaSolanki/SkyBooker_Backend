@@ -137,11 +137,11 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// Create database if it doesn't exist
+// Create database and run migrations
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<PassengerDbContext>();
-    context.Database.EnsureCreated();
+    context.Database.Migrate();
 }
 
 app.Run();

@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SkyBooker.AuthService.Data;
@@ -104,11 +106,16 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Create database if it doesn't exist
+// Create database and tables if they don't exist
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<UsersDbContext>();
-    context.Database.EnsureCreated();
+    var creator = context.Database.GetService<IDatabaseCreator>() as RelationalDatabaseCreator;
+    if (creator != null)
+    {
+        if (!creator.Exists()) creator.Create();
+        try { creator.CreateTables(); } catch {}
+    }
 }
 
 // Configure the HTTP request pipeline

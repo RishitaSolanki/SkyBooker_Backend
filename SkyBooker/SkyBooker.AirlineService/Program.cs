@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
@@ -113,11 +114,16 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// Ensure database is created
+// Ensure database and tables are created
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<AirlineDbContext>();
-    context.Database.EnsureCreated();
+    var creator = context.Database.GetService<IDatabaseCreator>() as RelationalDatabaseCreator;
+    if (creator != null)
+    {
+        if (!creator.Exists()) creator.Create();
+        try { creator.CreateTables(); } catch {}
+    }
 }
 
 app.Run();
