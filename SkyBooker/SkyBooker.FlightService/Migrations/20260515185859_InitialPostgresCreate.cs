@@ -71,7 +71,7 @@ namespace SkyBooker.FlightService.Migrations
                     AvailableSeats = table.Column<int>(type: "integer", nullable: false),
                     BusinessPrice = table.Column<decimal>(type: "numeric(10,2)", nullable: false),
                     EconomyPrice = table.Column<decimal>(type: "numeric(10,2)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>

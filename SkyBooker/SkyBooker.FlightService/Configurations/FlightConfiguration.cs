@@ -38,7 +38,7 @@ public class FlightConfiguration : IEntityTypeConfiguration<Flight>
             .HasColumnType("decimal(10,2)");
 
         builder.Property(f => f.CreatedAt)
-            .HasDefaultValueSql("GETUTCDATE()");
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
         builder.Property(f => f.Status)
             .HasDefaultValue(Common.Enums.FlightStatus.Scheduled);
