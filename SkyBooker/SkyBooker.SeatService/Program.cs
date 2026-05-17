@@ -146,6 +146,22 @@ using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<SeatDbContext>();
     context.Database.Migrate();
+
+    // Auto-generate seats for mock flights (Flight IDs 1 to 5) if the table is empty
+    if (!context.Seats.Any())
+    {
+        var seats = new List<SkyBooker.SeatService.Entities.Seat>();
+        for (int flightId = 1; flightId <= 5; flightId++)
+        {
+            for (int i = 1; i <= 20; i++)
+                seats.Add(new SkyBooker.SeatService.Entities.Seat { FlightId = flightId, SeatNumber = "B" + i, SeatClass = "Business", Status = "AVAILABLE", CreatedAt = DateTime.UtcNow });
+            
+            for (int i = 1; i <= 180; i++)
+                seats.Add(new SkyBooker.SeatService.Entities.Seat { FlightId = flightId, SeatNumber = "E" + i, SeatClass = "Economy", Status = "AVAILABLE", CreatedAt = DateTime.UtcNow });
+        }
+        context.Seats.AddRange(seats);
+        context.SaveChanges();
+    }
 }
 
 app.Run();
