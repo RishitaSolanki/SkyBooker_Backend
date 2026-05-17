@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -117,11 +117,11 @@ namespace SkyBooker.FlightService.Migrations
                 columns: new[] { "FlightId", "AircraftType", "AirlineId", "ArrivalTime", "AvailableSeats", "BusinessPrice", "CreatedAt", "DepartureTime", "DestinationAirportCode", "DurationMinutes", "EconomyPrice", "FlightNumber", "OriginAirportCode", "TotalSeats", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, "Boeing 787", 1, new DateTime(2026, 5, 14, 8, 30, 0, 0, DateTimeKind.Unspecified), 180, 8500.00m, new DateTime(2026, 4, 27, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2026, 5, 14, 6, 0, 0, 0, DateTimeKind.Unspecified), "BOM", 150, 5500.00m, "AI101", "DEL", 250, null },
-                    { 2, "Airbus A320", 2, new DateTime(2026, 5, 14, 11, 45, 0, 0, DateTimeKind.Unspecified), 120, 6200.00m, new DateTime(2026, 4, 27, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2026, 5, 14, 10, 0, 0, 0, DateTimeKind.Unspecified), "BLR", 105, 4200.00m, "6E202", "BOM", 180, null },
-                    { 3, "Airbus A321", 4, new DateTime(2026, 5, 14, 20, 30, 0, 0, DateTimeKind.Unspecified), 45, 9200.00m, new DateTime(2026, 4, 27, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2026, 5, 14, 18, 0, 0, 0, DateTimeKind.Unspecified), "BOM", 150, 6200.00m, "UK303", "DEL", 200, null },
-                    { 4, "Boeing 737", 3, new DateTime(2026, 5, 15, 10, 0, 0, 0, DateTimeKind.Unspecified), 90, 7200.00m, new DateTime(2026, 4, 27, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2026, 5, 15, 7, 30, 0, 0, DateTimeKind.Unspecified), "BOM", 150, 4800.00m, "SG404", "DEL", 180, null },
-                    { 5, "Boeing 787", 1, new DateTime(2026, 5, 14, 23, 30, 0, 0, DateTimeKind.Unspecified), 200, 8200.00m, new DateTime(2026, 4, 27, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2026, 5, 14, 21, 0, 0, 0, DateTimeKind.Unspecified), "DEL", 150, 5200.00m, "AI102", "BOM", 250, null }
+                    { 1, "Boeing 787", 1, new DateTime(2026, 5, 14, 8, 30, 0, 0, DateTimeKind.Utc), 180, 8500.00m, new DateTime(2026, 4, 27, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2026, 5, 14, 6, 0, 0, 0, DateTimeKind.Utc), "BOM", 150, 5500.00m, "AI101", "DEL", 250, null },
+                    { 2, "Airbus A320", 2, new DateTime(2026, 5, 14, 11, 45, 0, 0, DateTimeKind.Utc), 120, 6200.00m, new DateTime(2026, 4, 27, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2026, 5, 14, 10, 0, 0, 0, DateTimeKind.Utc), "BLR", 105, 4200.00m, "6E202", "BOM", 180, null },
+                    { 3, "Airbus A321", 4, new DateTime(2026, 5, 14, 20, 30, 0, 0, DateTimeKind.Utc), 45, 9200.00m, new DateTime(2026, 4, 27, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2026, 5, 14, 18, 0, 0, 0, DateTimeKind.Utc), "BOM", 150, 6200.00m, "UK303", "DEL", 200, null },
+                    { 4, "Boeing 737", 3, new DateTime(2026, 5, 15, 10, 0, 0, 0, DateTimeKind.Utc), 90, 7200.00m, new DateTime(2026, 4, 27, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2026, 5, 15, 7, 30, 0, 0, DateTimeKind.Utc), "BOM", 150, 4800.00m, "SG404", "DEL", 180, null },
+                    { 5, "Boeing 787", 1, new DateTime(2026, 5, 14, 23, 30, 0, 0, DateTimeKind.Utc), 200, 8200.00m, new DateTime(2026, 4, 27, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2026, 5, 14, 21, 0, 0, 0, DateTimeKind.Utc), "DEL", 150, 5200.00m, "AI102", "BOM", 250, null }
                 });
 
             migrationBuilder.CreateIndex(
